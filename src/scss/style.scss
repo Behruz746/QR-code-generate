@@ -1,0 +1,51 @@
+*,*::before,*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: all 0.25s ease-out;
+}
+
+// #0DDCB3FF, #163890FF
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: #247F4FFF;
+    overflow: hidden;
+    color: #fff;
+
+    .form__qr {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    input {
+        padding: 13px;
+        border: 0;
+        outline: 0;
+    }
+
+    label {
+        padding: 13px;
+        background-color: #fff;
+        color: #000;
+    }
+
+    .container {
+        display: flex;
+        gap: 20px;
+        max-width: 1200px + 30px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+}
+
+
+.header {
+    padding: 32px 0;
+    background-color: #247F4FFF;
+}
