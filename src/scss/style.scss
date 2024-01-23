@@ -19,11 +19,12 @@ body {
     .form__qr {
         display: flex;
         flex-direction: column;
-        gap: 30px;
+        gap: 20px;
     }
 
     input {
-        padding: 13px;
+        margin: 0;
+        padding: 0;
         border: 0;
         outline: 0;
     }
@@ -44,8 +45,12 @@ body {
     }
 }
 
+.qr__container {
+    width: 200px;
+    height: 200px;
 
-.header {
-    padding: 32px 0;
-    background-color: #247F4FFF;
+    #qr-code-id {
+        width: 200px !important;
+        height: 200px !important;
+    }
 }
