@@ -11,6 +11,8 @@ function App() {
   const [isQrDot, setIsQrDot] = useState(false);
   const [isQrLgPath, setIsQrLgPath] = useState(false);
   const [isQrRadius, setIsQrRadius] = useState(0);
+  const [isQrImageW, setISQrImageW] = useState(0);
+  const [isQrImageH, setISQrImageH] = useState(0);
 
   const removeImage = () => setIsQrLgPath(false);
   const downloadCode = () => {
@@ -28,9 +30,40 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    console.log(isQrLgPath);
-  }, [isQrLgPath]);
+  const loadImage = (e) => {
+    const ev = e.currentTarget.files;
+
+    if (ev) {
+      const img = document.createElement("img");
+      const targetWidth = 100;
+      const targetHeight = 100;
+      img.onload = function (event) {
+        const aspectRatio = event.target.width / event.target.height;
+        let newWidth, newHeight;
+
+        if (aspectRatio > 1) {
+          newWidth = Math.min(targetWidth, aspectRatio * targetHeight);
+          newHeight = Math.min(targetHeight, targetWidth / aspectRatio);
+        } else {
+          newWidth = Math.min(targetWidth, targetHeight / aspectRatio);
+          newHeight = Math.min(targetHeight, aspectRatio * targetWidth);
+        }
+
+        console.log({
+          width: event.target.width,
+          height: event.target.height,
+          newWidtg: newWidth,
+          newHeight: newHeight,
+        });
+
+        setISQrImageW(newWidth);
+        setISQrImageH(newHeight);
+      };
+
+      img.src = URL.createObjectURL(e.target.files[0]);
+    }
+    setIsQrLgPath(URL.createObjectURL(e.target.files[0]));
+  };
 
   const QRCodeComponent = () => {
     return (
@@ -39,19 +72,24 @@ function App() {
           value={isQrLk} // link
           ecLevel="H" // The error correction level of the QR Code
           size={isQrSz} // size QR code
+          quietZone={10}
           logoImage={isQrLgPath} // logo
-          logoWidth={isQrSz * 0.4} // wodth logo
-          logoHeight={isQrSz * 0.4} // height logo
+          logoWidth={isQrImageW} // wodth logo
+          logoHeight={isQrImageH} // height logo
           logoOpacity={1} // logo opcity
           removeQrCodeBehindLogo={false} // logo backgroundd
+          logoPaddingStyle="square" // style logo square | circle
+          logoPadding={0}
           eyeColor={isQrEyeColor} // eyes color
           bgColor={isQrColor} // background color
           fgColor={isQrDotColor} // QR code color
           eyeRadius={+isQrRadius}
-          logoPaddingStyle="square" // style logo square | circle
           qrStyle={isQrDot ? "dots" : "squares"} // squares | dots QR dots styles
           id="qr-code-id" // QR code elelemt ID
         />
+        <button className="qrCode__btn btn" onClick={() => downloadCode()}>
+          Download QR Code
+        </button>
       </div>
     );
   };
@@ -77,9 +115,7 @@ function App() {
                 id="image-update"
                 name="imgUpload"
                 accept="image/*"
-                onChange={(e) => {
-                  setIsQrLgPath(URL.createObjectURL(e.target.files[0]));
-                }}
+                onChange={(e) => loadImage(e)}
               />
             </div>
             <div className="color__input">
@@ -102,18 +138,35 @@ function App() {
 
             <input
               type="number"
+              min="0"
+              max="21"
               onInput={(e) => setIsQrRadius(e.target.value)}
               value={isQrRadius}
             />
 
             {isQrLgPath && (
-              <button className="qrRemove__btn" onClick={() => removeImage()}>
+              <button
+                className="qrRemove__btn btn"
+                onClick={() => removeImage()}
+              >
                 Remove image
               </button>
             )}
-            <button className="qrCode__btn" onClick={() => downloadCode()}>
-              Download QR Code
-            </button>
+
+            <div>
+              <button
+                className="qrDot__btn btn"
+                onClick={() => setIsQrDot(false)}
+              >
+                squares
+              </button>
+              <button
+                className="qrDot__btn btn"
+                onClick={() => setIsQrDot(true)}
+              >
+                Dots
+              </button>
+            </div>
           </div>
 
           <div className="app__qrcode">
